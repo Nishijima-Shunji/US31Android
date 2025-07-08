@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - lb_bird
+  - lb_groundTarget
+  - lb_perchTarget
+  - Bullet
   layers:
   - Default
   - TransparentFX

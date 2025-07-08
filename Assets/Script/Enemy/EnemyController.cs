@@ -15,6 +15,8 @@ public class EnemyController : MonoBehaviour
 
     Vector3 prevPos;
 
+    [SerializeField] private GameObject hitEffectPrefab; // エフェクト用プレハブ
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -88,5 +90,29 @@ public class EnemyController : MonoBehaviour
     {
         latDeg = Mathf.Asin(dir.y) * Mathf.Rad2Deg;
         lonDeg = Mathf.Atan2(dir.z, dir.x) * Mathf.Rad2Deg;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("EnemyController: Triggered with " + other.name);
+        if (other.CompareTag("Bullet"))
+        {
+            // エフェクト再生
+            if (hitEffectPrefab != null)
+            {
+                Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+            }
+
+            // カウントアップ
+            ScoreCounter killCounter = FindObjectOfType<ScoreCounter>();
+            if (killCounter != null)
+            {
+                killCounter.AddKill();
+            }
+
+            // 弾と敵を削除
+            Destroy(other.gameObject); // Bullet
+            Destroy(gameObject);       // Enemy
+        }
     }
 }
